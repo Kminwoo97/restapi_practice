@@ -31,11 +31,14 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public Member login(@Valid @RequestBody LoginRequest loginRequest,
+    public String login(@Valid @RequestBody LoginRequest loginRequest,
                         HttpServletResponse response) {
-        //Header 값에서 JWT 토큰 받아와야한다.
-        response.addHeader("Authentication", "JWT 토큰");
+        //로그인 성공 시, JWT 토큰 생성
+        String accessToken = memberService.genAccessToken(loginRequest.getUsername(), loginRequest.getPassword());
 
-        return memberService.findByUsername(loginRequest.getUsername()).orElse(null);
+        //생성한 JWT 토큰을 Header 값에서 넣어준다.
+        response.addHeader("Authentication", accessToken);
+
+        return "응답 본문";
     }
 }

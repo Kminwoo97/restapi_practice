@@ -38,7 +38,7 @@ class MemberControllerTest {
                                 .content("""
                                         {
                                             "username" : "user1",
-                                            "password" : '1234"
+                                            "password" : "1234"
                                         }
                                         """.stripIndent())
                                 .contentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))

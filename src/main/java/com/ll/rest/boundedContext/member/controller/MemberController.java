@@ -45,11 +45,19 @@ public class MemberController {
     @Operation(summary = "로그인, 엑세스 토큰 발급")
     public RsData<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest,
                                        HttpServletResponse response) {
-        //로그인 성공 시, JWT 토큰 생성
-        String accessToken = memberService.genAccessToken(loginRequest.getUsername(), loginRequest.getPassword());
+        Member member = memberService
+                .findByUsername(loginRequest.getUsername())
+                .orElse(null);
 
-        //생성한 JWT 토큰을 Header 값에서 넣어준다.
-        //response.addHeader("Authentication", accessToken);
+        if (member == null)
+            return RsData.of("F-1", "존재하지 않는 회원입니다.");
+
+        RsData rsData = memberService.canGenAccessToken(member, loginRequest.getPassword());
+
+        if (rsData.isFail()) return rsData;
+
+        String accessToken = memberService.genAccessToken(member, loginRequest.getPassword());
+
 
         return RsData.of(
                 "S-1",

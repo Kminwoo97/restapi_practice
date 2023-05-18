@@ -46,7 +46,7 @@ public class MemberController {
         String accessToken = memberService.genAccessToken(loginRequest.getUsername(), loginRequest.getPassword());
 
         //생성한 JWT 토큰을 Header 값에서 넣어준다.
-        response.addHeader("Authentication", accessToken);
+        //response.addHeader("Authentication", accessToken);
 
         return RsData.of(
                 "S-1",

@@ -34,8 +34,10 @@ public class SecurityConfig {
                                 // 이외의 모든 경로는 인증 해야지 접근 가능하다.
                                 .requestMatchers("/api/*/member/login").permitAll()
 
-                                // 글 보기는 누구나 가능
+                                // 글 전체 보기는 누구나 가능
                                 .requestMatchers("/api/*/articles").permitAll()
+                                // 특정 글 한 건 보기는 누구나 가능
+                                .requestMatchers("/api/*/articles/*").permitAll()
 
                                 .anyRequest().authenticated()
                 )

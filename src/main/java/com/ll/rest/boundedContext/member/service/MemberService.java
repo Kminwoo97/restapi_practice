@@ -50,5 +50,9 @@ public class MemberService {
         //member 의 데이터를 받아서 그 데이터를 JWT 토큰으로 만들어서 반환
         return jwtProvider.genToken(member.toClaims(), 60 * 60 * 24 * 365);
     }
+
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
+    }
 }
 

@@ -4,6 +4,7 @@ package com.ll.rest.boundedContext.member.controller;
 import com.ll.rest.base.rsData.RsData;
 import com.ll.rest.boundedContext.member.entity.Member;
 import com.ll.rest.boundedContext.member.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -40,6 +41,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "로그인, 엑세스 토큰 발급")
     public RsData<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest,
                                        HttpServletResponse response) {
         //로그인 성공 시, JWT 토큰 생성
@@ -64,6 +66,7 @@ public class MemberController {
     //consumes = ALL_VALUE 는 입력 데이터 형태가 어떤 것이든 상관없다.
 
     @GetMapping(value = "/me", consumes = ALL_VALUE)
+    @Operation(summary = "로그인 된 사용자의 정보") //Swagger 문서에만 의미있는 것
     public RsData<MeResponse> me(@AuthenticationPrincipal User user){
         //security 의 @AuthenticationPrincipal
         Member member = memberService.findByUsername("user1").get();

@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+//스프링 시큐리타가 자격이 없는 요청에 대해서 응답값 커스터마이징
 @Component
 public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override

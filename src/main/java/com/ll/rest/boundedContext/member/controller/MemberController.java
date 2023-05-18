@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.ALL_VALUE;
@@ -62,8 +64,8 @@ public class MemberController {
     //consumes = ALL_VALUE 는 입력 데이터 형태가 어떤 것이든 상관없다.
 
     @GetMapping(value = "/me", consumes = ALL_VALUE)
-    public RsData<MeResponse> me(){
-        //지금은 임의로 NotProd에 넣은 임의의 사용자를 넣었지만, 실제로는 로그인 한 사용자를 조회해야 한다.
+    public RsData<MeResponse> me(@AuthenticationPrincipal User user){
+        //security 의 @AuthenticationPrincipal
         Member member = memberService.findByUsername("user1").get();
 
         return RsData.of(

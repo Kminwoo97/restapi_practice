@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -68,6 +69,7 @@ class MemberControllerTest {
     }
 
     @Test
+    @WithUserDetails("user1") // user1 인 상태에서 아래의 테스트 케이스를 실행한다. UserDetailService 에게 요청을 한다.
     @DisplayName("GET /api/v1/member/me 는 내 정보를 조회하는 URL 이다.")
     void t2() throws Exception {
         ResultActions resultActions = mvc.perform(
@@ -79,6 +81,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.resultCode").value("S-1"))
                 .andExpect(jsonPath("$.msg").exists())
                 .andExpect(jsonPath("$.data.member.id").exists())
-                .andExpect(jsonPath("$.data.member.username").exists());
+                .andExpect(jsonPath("$.data.member.username").exists())
+                .andExpect(jsonPath("$.data.member.username").value("user1"));
     }
 }

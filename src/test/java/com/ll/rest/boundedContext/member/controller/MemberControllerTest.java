@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,5 +65,20 @@ class MemberControllerTest {
         assertThat(authentication).isNotEmpty();
          */
 
+    }
+
+    @Test
+    @DisplayName("GET /api/v1/member/me 는 내 정보를 조회하는 URL 이다.")
+    void t2() throws Exception {
+        ResultActions resultActions = mvc.perform(
+                get("/api/v1/member/me")
+        ).andDo(print());
+
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.resultCode").value("S-1"))
+                .andExpect(jsonPath("$.msg").exists())
+                .andExpect(jsonPath("$.data.member.id").exists())
+                .andExpect(jsonPath("$.data.member.username").exists());
     }
 }

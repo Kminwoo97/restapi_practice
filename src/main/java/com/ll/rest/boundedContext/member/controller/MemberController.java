@@ -11,11 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -26,7 +24,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @Data
-    static class LoginRequest{
+    static class LoginRequest {
         @NotBlank
         private String username;
         @NotBlank
@@ -35,7 +33,7 @@ public class MemberController {
 
     @AllArgsConstructor
     @Getter
-    static class LoginResponse{
+    static class LoginResponse {
         private final String accessToken;
     }
 
@@ -52,6 +50,26 @@ public class MemberController {
                 "S-1",
                 "엑세스토큰이 생성되었습니다.",
                 new LoginResponse(accessToken)
+        );
+    }
+
+    @Getter
+    @AllArgsConstructor
+    static class MeResponse{
+        private final Member member;
+    }
+
+    //consumes = ALL_VALUE 는 입력 데이터 형태가 어떤 것이든 상관없다.
+
+    @GetMapping(value = "/me", consumes = ALL_VALUE)
+    public RsData<MeResponse> me(){
+        //지금은 임의로 NotProd에 넣은 임의의 사용자를 넣었지만, 실제로는 로그인 한 사용자를 조회해야 한다.
+        Member member = memberService.findByUsername("user1").get();
+
+        return RsData.of(
+                "S-1",
+                "성공",
+                new MeResponse(member)
         );
     }
 }

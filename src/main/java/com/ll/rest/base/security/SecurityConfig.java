@@ -5,6 +5,7 @@ import com.ll.rest.base.security.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -30,15 +31,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
-                                // /api/*/member/login 은 모두가 접근 허용된다.
-                                // 이외의 모든 경로는 인증 해야지 접근 가능하다.
-                                .requestMatchers("/api/*/member/login").permitAll()
-
-                                // 글 전체 보기는 누구나 가능
-                                .requestMatchers("/api/*/articles").permitAll()
-                                // 특정 글 한 건 보기는 누구나 가능
-                                .requestMatchers("/api/*/articles/*").permitAll()
-
+                                .requestMatchers(HttpMethod.POST, "/api/*/member/login").permitAll() // 로그인은 누구나 가능
+                                .requestMatchers(HttpMethod.GET, "/api/*/articles").permitAll() // 글 전체조회는 누구나 가능
+                                .requestMatchers(HttpMethod.GET, "/api/*/articles/*").permitAll() // 글 단건 조회는 누구나 가능
                                 .anyRequest().authenticated()
                 )
                 .cors().disable() //타 도메인에서 API 호출 가능
